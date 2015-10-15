@@ -24,6 +24,17 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
     }}, 
     function(err, httpResponse, body) {
       if(!err) {
+        /* Check if tracking number exists */
+        if (/No hay informaci.*n disponible\./i.test(body)) {
+          res.status(404).send({
+            meta: {
+              code: 404,
+              message: "Not found"
+            }
+          });
+          return false;
+        }
+        
         console.log('Response: ', httpResponse.statusCode);
         var statusCode = httpResponse.statusCode;
         $ = cheerio.load(body, { normalizeWhitespace: true});
