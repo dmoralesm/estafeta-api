@@ -26,7 +26,7 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
       if(!err) {
         console.log('Response: ', httpResponse.statusCode);
         var statusCode = httpResponse.statusCode;
-        $ = cheerio.load(body, { normalizeWhitespace: true, decodeEntities: true });
+        $ = cheerio.load(body, { normalizeWhitespace: true});
 
         var json_data = {},
             data = $('td[bgcolor=#edf0e9] div'),
