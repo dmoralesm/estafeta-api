@@ -1,0 +1,20 @@
+{
+  "name": "estafeta-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Morales",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "cheerio": "^0.19.0",
+    "express": "^4.13.3",
+    "request": "^2.65.0"
+  }
+}
