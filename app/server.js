@@ -24,8 +24,15 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
     }}, 
     function(err, httpResponse, body) {
       if(!err) {
+
+        console.log('Response: ', httpResponse.statusCode);
+        var statusCode = httpResponse.statusCode;
+        $ = cheerio.load(body, { normalizeWhitespace: true});
+        var data = $('td[bgcolor=#edf0e9] div');
+
         /* Check if tracking number exists */
-        if (/No hay informaci.*n disponible\./i.test(body)) {
+        if (data.length == 1 && data.eq(0).text().trim() == req.params.tracking_number) {
+          console.log('no existe');
           res.status(404).send({
             meta: {
               code: 404,
@@ -34,13 +41,21 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
           });
           return false;
         }
-        
-        console.log('Response: ', httpResponse.statusCode);
-        var statusCode = httpResponse.statusCode;
-        $ = cheerio.load(body, { normalizeWhitespace: true});
+
+        /* Check if tracking number is expired */
+        if (data.eq(1).text().trim() == req.params.tracking_number && data.eq(5).text().trim() == "No hay información") {
+          res.status(410).send({
+            meta: {
+              code: 410,
+              message: "Expired"
+            }
+          });
+          return false;
+        }
+
 
         var json_data = {},
-            data = $('td[bgcolor=#edf0e9] div'),
+            //data = $('td[bgcolor=#edf0e9] div'),
             origin = data.eq(2).text(),
             destination = data.eq(3).text(),
             shipped_at = helpers.datetimeToIso(data.eq(13).text()),
@@ -150,14 +165,6 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
           });
         }
 
-
-        /*
-        detail_rows.each(function(i, elem) {
-          console.log('['+i+']'+$(this).html());
-        });
-        */ 
-
-        //res.header("Content-Type", "application/json; charset=utf-8");
         res.send(json_data);
       } else {
       console.log(err);
