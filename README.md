@@ -1,6 +1,6 @@
 # estafeta-api 
 
-Esta es una API hecha sobre Node.js para rastrear los envíos realizados por Estafeta.
+Esta es una API Rest hecha sobre Node.js para rastrear los envíos realizados por Estafeta.
 
 ## Instalación y uso
 ````
