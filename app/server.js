@@ -32,7 +32,7 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
 
         /* Check if tracking number exists */
         if (data.length == 1 && data.eq(0).text().trim() == req.params.tracking_number) {
-          console.log('no existe');
+          //console.log('no existe');
           res.status(404).send({
             meta: {
               code: 404,
