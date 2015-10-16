@@ -25,7 +25,7 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
     function(err, httpResponse, body) {
       if(!err) {
 
-        console.log('Response: ', httpResponse.statusCode);
+        //console.log('Response: ', httpResponse.statusCode);
         var statusCode = httpResponse.statusCode;
         $ = cheerio.load(body, { normalizeWhitespace: true});
         var data = $('td[bgcolor=#edf0e9] div');
@@ -106,8 +106,6 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
         var detail_rows_length = detail_rows.length - 1;
         json_data.data.checkpoints_count = detail_rows_length;
 
-        console.log('Total rows: '+ detail_rows_length);
-
         /* Ignore table header with i > 0 */
         for (var i = detail_rows_length; i > 0; i--) {
           //console.log('['+i+']'+detail_rows.eq(i).find('div').text());
@@ -166,9 +164,15 @@ app.get('/api/tracking/:tracking_number', function(req, res) {
         }
 
         res.send(json_data);
-      } else {
-      console.log(err);
-    }
+      } 
+      else {
+        res.status(503).send({
+          meta: {
+            code: 503, 
+            message: "Service unavailable"
+          }
+        });
+      }
     } 
   );
 });
